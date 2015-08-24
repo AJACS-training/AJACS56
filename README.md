@@ -32,7 +32,7 @@
 櫻井 望  
 (かずさDNA研究所)  
 
-15:10～16:40  「[次世代シーケンサーデータの取り扱いと疾患ゲノム解析の基礎](https://github.com/AJACS-training/AJACS56/blob/master/shimizu/)」後編  
+15:10～16:40  「[次世代シーケンサーデータの取り扱いと疾患ゲノム解析の基礎](https://github.com/AJACS-training/AJACS56/blob/master/shimizu/)」  
 清水 厚志  
 (岩手医科大学いわて東北メディカル・メガバンク機構)   
 

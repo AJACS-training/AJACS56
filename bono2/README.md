@@ -47,15 +47,22 @@ Rの実行に関しては主に2種類あって
 **これが全員できるまでここから先には進みません。**
 
 ## 1. pie chart(パイチャート)
-【実習1】Rを起動し以下のファイルに記述されたRのコマンド(`01piechart.r`)を実行しなさい。データファイルとして必要な`srabystudy.txt`をgithubのサイトからダウンロードし、現在作業しているディレクトリにおいておく必要があります。実行後、そのディレクトリに`pie1.png`というファイルが新たに生成されていることを確認しなさい。
+【実習1】Rを起動し以下のファイルに記述されたRのコマンド(`01piechart.r`)を実行しなさい。#(シャープ)から始まる行は、コメント行で、プログラムの実行には関係ありません(=入力しなくてよい)。データファイルとして必要な`srabystudy.txt`をgithubのサイトからダウンロードし、現在作業しているディレクトリにおいておく必要があります。実行後、そのディレクトリに`pie1.png`というファイルが新たに生成されていることを確認しなさい。
 
-    png("pie1.png") #出力する画像のファイル名を指定します
-    dat <- read.delim2("srabystudy.txt", header=F) #タブ区切りのデータを読み込みます
-    names(dat) <- c("Study", "freq") #columnにお名前を
-    dat <- cbind(dat, serial=seq(dim(dat)[1])) #列を結合
-    dat2 <- dat[ dat$freq != 0, ] #値が0じゃないデータだけを使います
-    pie(dat2$freq, labels=paste(dat2$Study, dat2$freq), col=rainbow(dim(dat[1])[dat2$serial]), main="SRA by Study") #パイチャートを描きます
-    dev.off() #画像を完成させるおまじない。忘れずに!
+    #出力する画像のファイル名を指定します
+    png("pie1.png") 
+    #タブ区切りのデータを読み込みます
+    dat <- read.delim2("srabystudy.txt", header=F) 
+    #columnにお名前を
+    names(dat) <- c("Study", "freq") 
+    #列を結合
+    dat <- cbind(dat, serial=seq(dim(dat)[1])) 
+    #値が0じゃないデータだけを使います
+    dat2 <- dat[ dat$freq != 0, ] 
+    #パイチャートを描きます
+    pie(dat2$freq, labels=paste(dat2$Study, dat2$freq), col=rainbow(dim(dat[1])[dat2$serial]), main="SRA by Study") 
+    #画像を完成させるおまじない。忘れずに!
+    dev.off() 
 
 先ほど説明のあったSRA(Sequence Read Archive)のメタデータを取りまとめてStudyのタイプで分けた結果がこのデータ(`srabystudy.txt`)で、それを元にpie chartを描いてみるのが本課題でした。
 
@@ -68,10 +75,15 @@ Rの実行に関しては主に2種類あって
 ## 2. hierachical clustering(階層的クラスタリング)
 【実習2】Rを起動し以下のファイルに記述されたRのコマンド(`02hclust.r`)を実行しなさい。データファイルとして必要な`matrix.txt`をgithubのサイトからダウンロードし、現在作業しているディレクトリにおいておく必要があります。実行後、そのディレクトリに`hclust.png`というファイルが新たに生成されていることを確認しなさい。
 
+    #出力する画像のファイル名を指定します
     png("hclust.png")
+    #データを読み込みます(スペース区切り)
     d <- read.table('matrix.txt')
+    #UPGMA法で階層的クラスタリングを実行
     c <- hclust(as.dist(d), method = 'average')
+    #結果をプロット
     plot(c, hang=-1)
+    #画像を完成させるおまじない。忘れずに!
     dev.off()
     
 このプログラムはかつての蛋白質・核酸・酵素に寄稿したレビューで紹介したもので、当時階層的クラスタリングをフリーウェアで実行する手段として重宝された(はず)。[Bono H and Nakao MC, PNE 2003](http://www.ncbi.nlm.nih.gov/pubmed/12638180)
@@ -86,10 +98,14 @@ Rの実行に関しては主に2種類あって
     biocLite("affy")
     
 そして、affy library中のjustRMA関数を利用して、RMA(Robust Multichip Average)正規化してみましょう。自らのAffymetrix Genechip データ(CELファイル)がある人はそれを、ない人はGSE17264 Comparative transcriptome analysis of dedifferentiation in porcine mature adipocytes and follicular granulosa cellsにある生データ(CELファイル)で実行しましょう。実行する際、Session → Set Working Directory を、CELファイルをダウンロードしてきたディレクトリに指定することがポイントです。それができたら、以下のコード(`03justrma.r`)を実行します。
-
+    
+    #Bioconductorを使うときの呪文
     source("http://bioconductor.org/biocLite.R")
+    #affyライブラリをインストール
     biocLite("affy")
+    #affyライブラリを召喚
     library(affy)
+    #justRMAを実行、RMA.txtというファイルに出力
     write.exprs(justRMA(), file="RMA.txt")
     
 その結果生成される`RMA.txt`ファイルがRMAによって正規化された遺伝子発現データになります。
@@ -107,12 +123,19 @@ PCA(Primary Component Analysis)。 このパートは[ぼうのブログ「RでP
 この発展課題をやらなくても実行できるように用意してあり、`RMA.txt.zip`というファイルをダブルクリックすることで解凍(圧縮を解く)すると`RMA.txt`というファイルが生成されるようになっています。  
 PCAを実行するには、以下のRスクリプトを実行します。
 
+    #タブ区切りのデータを読み込み
     data <- read.table("RMA.txt", header=TRUE, row.names=1, sep="\t", quote="") 
+    #主成分分析を実行
     data.pca <- prcomp(t(data))
+    #名前を得る
     names(data.pca)
+    #標準偏差をプロット
     plot(data.pca$sdev, type="h", main="PCA s.d.")
+    #行列を転置
     data.pca.sample <- t(data) %*% data.pca$rotation[,1:2]
+    #PCAの結果をプロット
     plot(data.pca.sample, main="PCA")  
+    #ラベルに色付け
     text(data.pca.sample, colnames(data), col = c(rep("red", 3), rep("blue",3),rep("green",3),rep("black",3)))
     
 図に.CEL.gzの文字がいっぱい入っていて見づらい?そう思った方は[こちらを参照](http://bonohu.jp/blog/2014/09/10/afterjustrma/)
@@ -124,10 +147,15 @@ cufflinksパッケージに`cuffdiff`という発現データの差分を計算�
 
 【実習5】Rを起動し以下のファイルに記述されたRのコマンドを実行しなさい。データファイルとして必要なcuffdiffディレクトリ以下のファイルは手持ちのものか、なければサンプルをUSBメモリでお渡しします。現在作業しているディレクトリにおいておく必要があります。
 
+    #Bioconductorを使うときの呪文
     source("http://bioconductor.org/biocLite.R")
+    #cummeRbundをインストール
     biocLite("cummeRbund")
+    #cummeRbundを召喚
     library("cummeRbund")
+    #cuffdiffの結果のディレクトリを指定
     cuff.dir <- "cuffdiff"
+    #cuffdiffの結果の読み込む
     cuff <- readCufflinks(dir=cuff.dir)
 
 準備はここまでで、以下のコマンドで発現密度分布のプロット

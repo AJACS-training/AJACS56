@@ -39,7 +39,7 @@
 を実行すれば現在居るディレクトリ(current working directory)にAJACS56というディレクトリが作成され、それ以下にgithubにあるファイルがすべてダウンロードされます。またそのコマンドが使えない環境だと、[https://github.com/bonohu/AJACS56](https://github.com/bonohu/AJACS56)の画面右下の方の「Download ZIP」のリンクをたどると一括ダウンロードできます。
 
 Rの実行に関しては主に2種類あって
- * R をコマンドラインから使う場合
+ * Rをコマンドラインから使う場合
  * Rのアイコンをダブルクリックして使う場合
   * [Rstudio](http://www.rstudio.com/)からRを実行する 
 
@@ -158,15 +158,26 @@ cufflinksパッケージに`cuffdiff`という発現データの差分を計算�
     #cuffdiffの結果の読み込む
     cuff <- readCufflinks(dir=cuff.dir)
 
-準備はここまでで、以下のコマンドで発現密度分布のプロット
+準備はここまでで、
 
+    cuff
+
+で、読み込んだデータのサマリが見れます。以下、解析事例です。
+
+    #発現密度分布のプロット
     dens <- csDensity(genes(cuff))
     dens
-
-CSV形式でFPKM値を出力などができます。
-
+    
+    # サンプル方向のデンドログラム
+    dend <- csDendro(genes(cuff))
+    
+    #CSV形式でFPKM値を出力
     gene.matrix <- fpkmMatrix(genes(cuff))
     write.csv(gene.matrix, file="fpkm.csv")
+    
+詳しくは、マニュアルを読みましょう。
+
+    ?cummeRbund
     
 ## 5.最後に: R Graphical Manualのすゝめ
 どんなライブラリがあって、どういった可視化ができるかは[R Graphical Manual](http://rgm3.lab.nig.ac.jp/RGM)が大変便利です。このウェブサイトは国立遺伝学研究所の小笠原理さんによって維持されているRのライブラリに記載されているデモデータをあらかじめ計算して得られるイメージファイルをウェブから閲覧できるというもので、そのライブラリが激しくバージョンアップがなされるRにおいて、現在使用可能かどうかを知る上でも大変有用なものです。
